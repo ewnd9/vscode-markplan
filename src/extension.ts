@@ -2,9 +2,6 @@ import * as vscode from 'vscode';
 import {MarkdownLinkProvider} from './MarkdownLinkProvider';
 
 export function activate(context: vscode.ExtensionContext) {
-  // registerLinkProvider('markdown', new MarkdownDocumentLinkProvider());
-  console.log('Congratulations, your extension "markplan" is now active!');
-
   const disposable0 = vscode.commands.registerCommand('extension.helloWorld', () => {
     vscode.window.showInformationMessage('Hello Test!');
   });

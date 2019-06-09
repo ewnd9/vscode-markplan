@@ -20,24 +20,23 @@ export class MarkdownLinkProvider implements vscode.DocumentLinkProvider {
 
     let match: RegExpExecArray | null;
     while (match = regEx.exec(source)) {
-      const s = liner.fromIndex(match.index);
-      const e = liner.fromIndex(regEx.lastIndex);
-      const root = vscode.workspace.getWorkspaceFolder(document.uri);
-      const p = path.resolve(root!.uri.fsPath, match[0].substring(1));
-		  // const x = vscode.Uri.parse(`command:extension.helloWorld?${encodeURIComponent(JSON.stringify({ path: encodeURIComponent(p) }))}`);
-      const x = vscode.Uri.parse(`command:_markdown.openDocumentLink?${encodeURIComponent(JSON.stringify({ path: encodeURIComponent(p)}))}`);
-      // const x = vscode.Uri.parse(`command:vscode.open?${encodeURIComponent(JSON.stringify({ resource: vscode.Uri.file(p)}))}`);
+      const startPosition = liner.fromIndex(match.index);
+      const endPosition = liner.fromIndex(regEx.lastIndex);
+      const rootDir = vscode.workspace.getWorkspaceFolder(document.uri);
+      const destPath = path.resolve(rootDir!.uri.fsPath, match[0].substring(1));
+      const uri = vscode.Uri.parse(`command:_markdown.openDocumentLink?${encodeURIComponent(JSON.stringify({ path: encodeURIComponent(destPath)}))}`);
+      // not working for some reason, probably wrong argument name
+      // const uri = vscode.Uri.parse(`command:vscode.open?${encodeURIComponent(JSON.stringify({ resource: vscode.Uri.file(p)}))}`);
 
       result.push(new vscode.DocumentLink(
         new vscode.Range(
-          new vscode.Position(s.line, s.col),
-          new vscode.Position(e.line, e.col),
+          new vscode.Position(startPosition.line, startPosition.col),
+          new vscode.Position(endPosition.line, endPosition.col),
         ),
-        x
+        uri
       ));
     }
 
-    console.log('result', result);
     return result;
   }
 }
