@@ -8,6 +8,13 @@ $ yarn vsce package
 $ code --install-extension markplan-*.vsix
 ```
 
+## Development
+
+```sh
+$ yarn build:watch &
+$ code $PWD --extensionDevelopmentPath=$PWD # reload to test changes
+```
+
 ## Related
 
 - [`hyperclick-markdown`] https://github.com/ewnd9/hyperclick-markdown
