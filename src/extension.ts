@@ -2,6 +2,7 @@ import * as vscode from 'vscode';
 import {MarkdownLinkProvider} from './MarkdownLinkProvider';
 import {CatCodingPanel} from './TodoPreview';
 import { Editor } from './Editor';
+import { search } from './modules/search';
 
 export function activate(context: vscode.ExtensionContext) {
   const disposable0 = vscode.commands.registerCommand('extension.helloWorld', () => {
@@ -38,9 +39,9 @@ export function activate(context: vscode.ExtensionContext) {
     onDidChangeEmitter = new vscode.EventEmitter<vscode.Uri>();
     onDidChange = this.onDidChangeEmitter.event;
 
-    provideTextDocumentContent(uri: vscode.Uri): string {
-      console.log(uri);
-      return `doc\n\n\ndoc\n\ntest\n\ntest`;
+    async provideTextDocumentContent(uri: vscode.Uri): Promise<string> {
+      const matches = await search();
+      return matches.map(match => `${match.file}:${match.line}:\n${match.match}`).join('\n\n');
     }
   };
 
