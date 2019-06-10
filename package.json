@@ -12,7 +12,9 @@
   ],
   "activationEvents": [
     "onLanguage:markdown",
-    "onCommand:extension.helloWorld"
+    "onCommand:extension.helloWorld",
+    "onCommand:extension.openWebview",
+    "onCommand:extension.openTree"
   ],
   "main": "./out/extension.js",
   "contributes": {
@@ -22,14 +24,12 @@
         "title": "Hello World"
       },
       {
-        "command": "catCoding.start",
-        "title": "Start cat coding session",
-        "category": "Cat Coding"
+        "command": "extension.openWebview",
+        "title": "Markplan: Open Webview"
       },
       {
-        "command": "catCoding.doRefactor",
-        "title": "Do some refactoring",
-        "category": "Cat Coding"
+        "command": "extension.openTree",
+        "title": "Markplan: Open Tree"
       }
     ]
   },
