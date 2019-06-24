@@ -15,8 +15,5 @@ export async function search(): Promise<ripgrep.Match[]> {
   // options.maxBuffer = c.ripgrepMaxBuffer;
   // options.multiline = utils.getRegexSource().indexOf('\\n') > -1;
 
-  const searchRoot = `${cwd()}/docs`;
-  const matches = await ripgrep.search(searchRoot, options);
-
-  return matches;
+  return ripgrep.search(cwd(), options);
 }
