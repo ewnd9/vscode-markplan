@@ -12,7 +12,7 @@ $ code --install-extension markplan-*.vsix
 
 ```sh
 $ yarn build:watch &
-$ code $PWD --extensionDevelopmentPath=$PWD # reload to test changes
+$ code --disable-extensions --extensionDevelopmentPath=$PWD $PWD # reload to test changes
 ```
 
 ## Related
