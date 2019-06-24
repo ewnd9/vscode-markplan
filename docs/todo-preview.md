@@ -6,5 +6,7 @@
   - https://github.com/Gruntfuggly/todo-tree
   - https://github.com/fabiospampinato/vscode-todo-plus
     - [markdown support is out of scope](https://github.com/fabiospampinato/vscode-todo-plus/issues/166)
-
-- [ ] todo
+- misc
+  - https://github.com/yzhang-gh/vscode-markdown
+  - https://github.com/AlanWalk/Markdown-TOC
+  - https://github.com/wibblemonkey/vscode-markdown-auto-toc
