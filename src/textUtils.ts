@@ -3,6 +3,7 @@ import orderBy from 'lodash/orderBy';
 
 import distanceInWordsStrict from 'date-fns/distance_in_words_strict';
 import format from 'date-fns/format';
+import parse from 'date-fns/parse';
 
 import { MarkdownFile } from './modules/search';
 import * as ripgrep from './modules/ripgrep';
@@ -64,7 +65,9 @@ async function formatOrdered(matches: Array<MarkdownFile>, order: 'asc' | 'desc'
   const targets = groupBy(list, match => format(match.mtime, 'YYYY-MM-DD'));
   return Object.entries(targets)
     .slice(0, 50)
-    .map(([date, files]) => `## ${date}\n\n${formatFiles(files)}`)
+    .map(([date, files]) =>
+      `## ${date} (${distanceInWordsStrict(Date.now(), parse(date), {addSuffix: true})})\n\n${formatFiles(files)}`
+    )
     .join('\n\n');
 }
 
@@ -81,8 +84,8 @@ function formatFiles(items: Array<MarkdownFile>) {
     .map(
       target =>
         `- /${target.path} (${distanceInWordsStrict(
-          target.mtime,
-          Date.now()
+          Date.now(),
+          target.mtime
         )})`
     )
     .join('\n');
