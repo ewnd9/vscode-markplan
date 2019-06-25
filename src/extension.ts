@@ -1,7 +1,8 @@
 import * as vscode from 'vscode';
 import {MarkdownLinkProvider} from './MarkdownLinkProvider';
 import {CatCodingPanel} from './TodoPreview';
-import { MarkPlanTextDocumentContentProvider, AGGREGATES_ACTION, NEWEST_ACTION, OLDEST_ACTION } from './textUtils';
+import {AGGREGATES_ACTION, NEWEST_ACTION, OLDEST_ACTION} from './textUtils';
+import {MarkPlanTextDocumentContentProvider} from './MarkPlanTextDocumentContentProvider';
 
 export function activate(context: vscode.ExtensionContext) {
   const myScheme = 'cowsay';
