@@ -16,7 +16,9 @@
     "onCommand:extension.openWebview",
     "onCommand:extension.openAggregates",
     "onCommand:extension.openNewest",
-    "onCommand:extension.openOldest"
+    "onCommand:extension.openOldest",
+    "onCommand:extension.openLocalTodos",
+    "onCommand:extension.openGlobalTodos"
   ],
   "main": "./out/extension.js",
   "contributes": {
@@ -40,6 +42,14 @@
       {
         "command": "extension.openOldest",
         "title": "Markplan: Open Oldest"
+      },
+      {
+        "command": "extension.openLocalTodos",
+        "title": "Markplan: Open Local Todos"
+      },
+      {
+        "command": "extension.openGlobalTodos",
+        "title": "Markplan: Open Global Todos"
       }
     ]
   },

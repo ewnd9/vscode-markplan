@@ -1,10 +1,8 @@
 import { getRgPath } from '../ripgrep-vscode';
 import * as ripgrep from '../ripgrep';
-import { cwd } from '../vscode';
 
 const regex = '((//|#|<!--|;|/\\*)\\s*($TAGS)|^\\s*- \\[ \\])';
-
-export async function search(): Promise<ripgrep.Match[]> {
+export async function search(dir: string): Promise<ripgrep.Match[]> {
   const options = {
     regex: `\"${regex}\"`,
     rgPath: getRgPath(),
@@ -15,5 +13,6 @@ export async function search(): Promise<ripgrep.Match[]> {
   // options.maxBuffer = c.ripgrepMaxBuffer;
   // options.multiline = utils.getRegexSource().indexOf('\\n') > -1;
 
-  return ripgrep.search(cwd(), options);
+  console.log(dir)
+  return ripgrep.search(dir, options);
 }

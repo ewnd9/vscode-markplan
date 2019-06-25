@@ -1,7 +1,7 @@
 import * as vscode from 'vscode';
 import {MarkdownLinkProvider} from './MarkdownLinkProvider';
 import {CatCodingPanel} from './TodoPreview';
-import {AGGREGATES_ACTION, NEWEST_ACTION, OLDEST_ACTION} from './textUtils';
+import {AGGREGATES_ACTION, NEWEST_ACTION, OLDEST_ACTION, LOCAL_TODOS_ACTION, GLOBAL_TODOS_ACTION} from './textUtils';
 import {MarkPlanTextDocumentContentProvider} from './MarkPlanTextDocumentContentProvider';
 
 export function activate(context: vscode.ExtensionContext) {
@@ -36,6 +36,8 @@ export function activate(context: vscode.ExtensionContext) {
     {command: 'extension.openAggregates', action: AGGREGATES_ACTION},
     {command: 'extension.openNewest', action: NEWEST_ACTION},
     {command: 'extension.openOldest', action: OLDEST_ACTION},
+    {command: 'extension.openLocalTodos', action: LOCAL_TODOS_ACTION},
+    {command: 'extension.openGlobalTodos', action: GLOBAL_TODOS_ACTION},
   ];
 
   openCommands.forEach(({command, action}) => {
