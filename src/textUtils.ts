@@ -52,15 +52,7 @@ export function formatAggregates(matches: Array<MarkdownFile>) {
     .join('\n\n');
 }
 
-export function formatNewest(matches: Array<MarkdownFile>) {
-  return formatOrdered(matches, 'desc');
-}
-
-export function formatOldest(matches: Array<MarkdownFile>) {
-  return formatOrdered(matches, 'asc');
-}
-
-async function formatOrdered(matches: Array<MarkdownFile>, order: 'asc' | 'desc') {
+export function formatOrdered(matches: Array<MarkdownFile>, order: 'asc' | 'desc') {
   const list = orderBy(matches, 'mtime', order);
   const targets = groupBy(list, match => format(match.mtime, 'YYYY-MM-DD'));
   return Object.entries(targets)

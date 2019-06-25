@@ -2,8 +2,7 @@ import * as vscode from 'vscode';
 import path from 'path';
 import {
   formatAggregates,
-  formatNewest,
-  formatOldest,
+  formatOrdered,
   formatTodos,
 } from '../../textUtils';
 import { markdownFilesSearch, todosSearch } from '../search';
@@ -22,11 +21,11 @@ const mapper = {
   },
   [NEWEST_ACTION]: async () => {
     const matches = await markdownFilesSearch();
-    return formatNewest(matches);
+    return formatOrdered(matches, 'desc');
   },
   [OLDEST_ACTION]: async () => {
     const matches = await markdownFilesSearch();
-    return formatOldest(matches);
+    return formatOrdered(matches, 'asc');
   },
   [LOCAL_TODOS_ACTION]: async () => {
     const todos = await todosSearch(path.dirname(currentActiveFile()));
