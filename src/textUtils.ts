@@ -1,44 +1,10 @@
-import path from 'path';
-
 import groupBy from 'lodash/groupBy';
 import orderBy from 'lodash/orderBy';
 import chunk from 'lodash/chunk';
 
 import distanceInWordsStrict from 'date-fns/distance_in_words_strict';
-import { search, SearchItem } from './modules/globby';
-import { search as searchTodos } from './modules/search';
-import { cwd, currentActiveFile } from './modules/vscode';
-
-export const AGGREGATES_ACTION = 'AGGREGATES_ACTION';
-export const NEWEST_ACTION = 'NEWEST_ACTION';
-export const OLDEST_ACTION = 'OLDEST_ACTION';
-export const LOCAL_TODOS_ACTION = 'LOCAL_TODOS_ACTION';
-export const GLOBAL_TODOS_ACTION = 'GLOBAL_TODOS_ACTION';
-
-const mapper = {
-  [AGGREGATES_ACTION]: fetchAggregates,
-  [NEWEST_ACTION]: fetchNewest,
-  [OLDEST_ACTION]: fetchOldest,
-  [LOCAL_TODOS_ACTION]: fetchLocalTodos,
-  [GLOBAL_TODOS_ACTION]: fetchGlobalTodos,
-};
-
-export type Action = keyof typeof mapper;
-
-export async function fetchTextByAction({action}: {action: Action}) {
-  const fn = mapper[action];
-
-  if (!fn) {
-    return 'Unknown action';
-  }
-
-  try {
-    const content = await fn();
-    return `# ${action}\n\n${content}`;
-  } catch (err) {
-    return `Error: ${err.message}`;
-  }
-}
+import { MarkdownFile } from './modules/search';
+import * as ripgrep from './modules/ripgrep';
 
 interface ParseLinksItem {
   start: number;
@@ -61,9 +27,7 @@ export function parseLinks({source}: {source: string;}): Array<ParseLinksItem> {
   return result;
 }
 
-async function fetchAggregates() {
-  const matches = await search();
-
+export function formatAggregates(matches: Array<MarkdownFile>) {
   const targets = matches
     .filter(match => match.path.includes('--'))
     .map(item => {
@@ -86,39 +50,29 @@ async function fetchAggregates() {
     .join('\n\n');
 }
 
-async function fetchNewest() {
-  return fetchOrdered('desc');
+export function formatNewest(matches: Array<MarkdownFile>) {
+  return formatOrdered(matches, 'desc');
 }
 
-async function fetchOldest() {
-  return fetchOrdered('asc');
+export function formatOldest(matches: Array<MarkdownFile>) {
+  return formatOrdered(matches, 'asc');
 }
 
-async function fetchOrdered(order: 'asc' | 'desc') {
-  const matches = await search();
+async function formatOrdered(matches: Array<MarkdownFile>, order: 'asc' | 'desc') {
   const targets = orderBy(matches, 'mtime', order);
 
   return chunk(targets.slice(0, 50), 5).map(items => formatFiles(items)).join('\n\n');
 }
 
-async function fetchLocalTodos() {
-  return fetchTodos(path.dirname(currentActiveFile()));
-}
-
-async function fetchGlobalTodos() {
-  return fetchTodos(cwd());
-}
-
-async function fetchTodos(dir: string) {
-  const res = await searchTodos(dir);
-  const groups = groupBy(res, 'file');
+export function formatTodos(todos: ripgrep.Match[]) {
+  const groups = groupBy(todos, 'file');
 
   return Object.entries(groups)
     .map(([file, todos]) => `## ${file}\n\n${todos.map(todo => todo.match).join('\n')}`)
     .join('\n\n');
 }
 
-function formatFiles(items: Array<SearchItem>) {
+function formatFiles(items: Array<MarkdownFile>) {
   return items
     .map(
       target =>
