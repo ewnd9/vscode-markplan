@@ -1,6 +1,5 @@
 import { parseLinks } from './textUtils';
 
-jest.mock('./modules/globby');
 jest.mock('./modules/search');
 jest.mock('./modules/vscode');
 

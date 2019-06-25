@@ -17,7 +17,7 @@ $ code --disable-extensions --extensionDevelopmentPath=$PWD $PWD # reload to tes
 
 ## Related
 
-- [`hyperclick-markdown`] https://github.com/ewnd9/hyperclick-markdown
+- [`hyperclick-markdown`](https://github.com/ewnd9/hyperclick-markdown)
 
 ## License
 

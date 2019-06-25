@@ -1,6 +1,6 @@
 import * as vscode from 'vscode';
 
-export function cwd(): string {
+export function currentActiveWorkspace(): string {
   const workspaces = vscode.workspace.workspaceFolders;
   const result = workspaces && workspaces[0];
 

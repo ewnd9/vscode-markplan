@@ -1,13 +1,13 @@
 import path from 'path';
 import * as vscode from 'vscode';
 import lineColumn from 'line-column';
-import { cwd } from './modules/vscode';
-import { parseLinks } from './textUtils';
+import { currentActiveWorkspace } from '.';
+import { parseLinks } from '../../textUtils';
 
 // https://github.com/microsoft/vscode/blob/81d7885dc2e9dc617e1522697a2966bc4025a45d/extensions/markdown-language-features/src/features/documentLinkProvider.ts
 // https://github.com/microsoft/vscode/blob/c1c3e5eab0f2fb9e04a32b4fc6473023a9c25697/extensions/markdown-language-features/src/commands/openDocumentLink.ts
 // https://github.com/microsoft/vscode/blob/aa575b1e8a3d83df2abd61753077f9d33b9d3c0d/extensions/vscode-api-tests/src/singlefolder-tests/languages.test.ts
-export class MarkdownLinkProvider implements vscode.DocumentLinkProvider {
+export class MarkPlanLinkProvider implements vscode.DocumentLinkProvider {
   provideDocumentLinks(
     document: vscode.TextDocument,
     token: vscode.CancellationToken
@@ -26,7 +26,7 @@ export class MarkdownLinkProvider implements vscode.DocumentLinkProvider {
       let destPath;
 
       if (filePath.startsWith('/')) {
-        destPath = path.resolve(cwd(), filePath.substring(1));
+        destPath = path.resolve(currentActiveWorkspace(), filePath.substring(1));
       } else {
         destPath = path.resolve(path.dirname(document.fileName), filePath);
       }
