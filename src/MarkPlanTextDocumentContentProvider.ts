@@ -8,5 +8,9 @@ export class MarkPlanTextDocumentContentProvider implements vscode.TextDocumentC
   async provideTextDocumentContent(uri: vscode.Uri): Promise<string> {
     return fetchTextByAction({action: uri.path as Action});
   }
+
+  update(uri: vscode.Uri) {
+    this.onDidChangeEmitter.fire(uri);
+  }
 }
 
