@@ -39,7 +39,7 @@ interface ParseLinksItem {
 }
 
 export function parseLinks({source}: {source: string;}): Array<ParseLinksItem> {
-  const regEx = /(\.)?(\.)?\/.*\.md/g;
+  const regEx = /(\.)?(\.)?(?<!\/)\/[\w\d-_]*\.md/g;
   const result: Array<ParseLinksItem> = [];
 
   let match: RegExpExecArray | null;
