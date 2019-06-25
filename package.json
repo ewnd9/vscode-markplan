@@ -49,12 +49,16 @@
     "build:watch": "tsc -watch -p ./",
     "postinstall": "node ./node_modules/vscode/bin/install",
     "lint": "tslint -p .",
-    "test": "yarn build && node ./node_modules/vscode/bin/test"
+    "test:e2e": "yarn build && node ./node_modules/vscode/bin/test",
+    "test:unit": "jest ",
+    "test": "yarn test:unit && yarn test:e2e"
   },
   "devDependencies": {
+    "@types/jest": "^24.0.15",
     "@types/lodash": "^4.14.134",
-    "@types/mocha": "^2.2.42",
     "@types/node": "^12.0.7",
+    "jest": "^24.8.0",
+    "ts-jest": "^24.0.2",
     "tslint": "^5.12.1",
     "typescript": "^3.3.1",
     "vsce": "^1.62.0",

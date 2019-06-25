@@ -1,4 +1,3 @@
-import * as vscode from 'vscode';
 import groupBy from 'lodash/groupBy';
 import orderBy from 'lodash/orderBy';
 import chunk from 'lodash/chunk';
@@ -16,25 +15,42 @@ const mapper = {
   [OLDEST_ACTION]: fetchOldest,
 };
 
-export class MarkPlanTextDocumentContentProvider implements vscode.TextDocumentContentProvider {
-  onDidChangeEmitter = new vscode.EventEmitter<vscode.Uri>();
-  onDidChange = this.onDidChangeEmitter.event;
+export type Action = keyof typeof mapper;
 
-  async provideTextDocumentContent(uri: vscode.Uri): Promise<string> {
-    const path = uri.path as keyof typeof mapper;
-    const fn = mapper[path];
+export async function fetchTextByAction({action}: {action: Action}) {
+  const fn = mapper[action];
 
-    if (!fn) {
-      return 'Unknown action';
-    }
-
-    try {
-      const content = await fn();
-      return `# ${path}\n\n${content}`;
-    } catch (err) {
-      return `Error: ${err.message}`;
-    }
+  if (!fn) {
+    return 'Unknown action';
   }
+
+  try {
+    const content = await fn();
+    return `# ${action}\n\n${content}`;
+  } catch (err) {
+    return `Error: ${err.message}`;
+  }
+}
+
+interface ParseLinksItem {
+  start: number;
+  end: number;
+  path: string;
+}
+
+export function parseLinks({source}: {source: string;}): Array<ParseLinksItem> {
+  const regEx = /(\.)?(\.)?\/.*\.md/g;
+  const result: Array<ParseLinksItem> = [];
+
+  let match: RegExpExecArray | null;
+  while (match = regEx.exec(source)) {
+    const start = match.index;
+    const end = regEx.lastIndex;
+    const path = match[0];
+    result.push({start, end, path});
+  }
+
+  return result;
 }
 
 async function fetchAggregates() {

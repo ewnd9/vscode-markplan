@@ -2,6 +2,7 @@ import path from 'path';
 import * as vscode from 'vscode';
 import lineColumn from 'line-column';
 import { cwd } from './modules/vscode';
+import { parseLinks } from './textUtils';
 
 // https://github.com/microsoft/vscode/blob/81d7885dc2e9dc617e1522697a2966bc4025a45d/extensions/markdown-language-features/src/features/documentLinkProvider.ts
 // https://github.com/microsoft/vscode/blob/c1c3e5eab0f2fb9e04a32b4fc6473023a9c25697/extensions/markdown-language-features/src/commands/openDocumentLink.ts
@@ -15,30 +16,32 @@ export class MarkdownLinkProvider implements vscode.DocumentLinkProvider {
     const liner = lineColumn(source, {
       origin: 0
     });
-    const regEx = /\/.*\.md/g;
 
-    const result: vscode.DocumentLink[] = [];
-
-    let match: RegExpExecArray | null;
-    while (match = regEx.exec(source)) {
-      const startPosition = liner.fromIndex(match.index);
+    return parseLinks({source}).map(({start, end, path: filePath}) => {
+      const startPosition = liner.fromIndex(start);
       const endPosition = liner.fromIndex(
-        regEx.lastIndex === source.length ? (regEx.lastIndex - 1) : regEx.lastIndex
+        end === source.length ? (end - 1) : end
       );
-      const destPath = path.resolve(cwd(), match[0].substring(1));
+
+      let destPath;
+
+      if (filePath.startsWith('/')) {
+        destPath = path.resolve(cwd(), filePath.substring(1));
+      } else {
+        destPath = path.resolve(path.dirname(document.fileName), filePath);
+      }
+
       const uri = vscode.Uri.parse(`command:_markdown.openDocumentLink?${encodeURIComponent(JSON.stringify({ path: encodeURIComponent(destPath)}))}`);
       // not working for some reason, probably wrong argument name
       // const uri = vscode.Uri.parse(`command:vscode.open?${encodeURIComponent(JSON.stringify({ resource: vscode.Uri.file(p)}))}`);
 
-      result.push(new vscode.DocumentLink(
+      return new vscode.DocumentLink(
         new vscode.Range(
           new vscode.Position(startPosition.line, startPosition.col),
           new vscode.Position(endPosition.line, endPosition.col),
         ),
         uri
-      ));
-    }
-
-    return result;
+      );
+    });
   }
 }
