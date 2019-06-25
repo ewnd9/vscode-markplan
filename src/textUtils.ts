@@ -1,8 +1,9 @@
 import groupBy from 'lodash/groupBy';
 import orderBy from 'lodash/orderBy';
-import chunk from 'lodash/chunk';
 
 import distanceInWordsStrict from 'date-fns/distance_in_words_strict';
+import format from 'date-fns/format';
+
 import { MarkdownFile } from './modules/search';
 import * as ripgrep from './modules/ripgrep';
 
@@ -59,9 +60,12 @@ export function formatOldest(matches: Array<MarkdownFile>) {
 }
 
 async function formatOrdered(matches: Array<MarkdownFile>, order: 'asc' | 'desc') {
-  const targets = orderBy(matches, 'mtime', order);
-
-  return chunk(targets.slice(0, 50), 5).map(items => formatFiles(items)).join('\n\n');
+  const list = orderBy(matches, 'mtime', order);
+  const targets = groupBy(list, match => format(match.mtime, 'YYYY-MM-DD'));
+  return Object.entries(targets)
+    .slice(0, 50)
+    .map(([date, files]) => `## ${date}\n\n${formatFiles(files)}`)
+    .join('\n\n');
 }
 
 export function formatTodos(todos: ripgrep.Match[]) {
