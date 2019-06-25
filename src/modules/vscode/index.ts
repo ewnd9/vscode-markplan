@@ -10,3 +10,14 @@ export function cwd(): string {
 
   return result.uri.path;
 }
+
+export function currentActiveFile(): string {
+  const editor = vscode.window.activeTextEditor;
+
+  if (!editor) {
+    throw new Error('no opened editors');
+  }
+
+  return editor.document.fileName;
+}
+
