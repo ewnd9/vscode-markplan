@@ -44,7 +44,14 @@ export function activate(context: vscode.ExtensionContext) {
         const uri = vscode.Uri.parse(`${myScheme}:${action}`);
         const doc = await vscode.workspace.openTextDocument(uri);
         vscode.languages.setTextDocumentLanguage(doc, 'markdown');
-        await vscode.window.showTextDocument(doc, { preview: false });
+
+        const activeUri = vscode.window.activeTextEditor && vscode.window.activeTextEditor.document.uri;
+        if (activeUri && activeUri.scheme === uri.scheme && activeUri.path === uri.path) {
+          myProvider.update(uri);
+        } else {
+          await vscode.window.showTextDocument(doc, { preview: false });
+        }
+
       })
     );
   });
