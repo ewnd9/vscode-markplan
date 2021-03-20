@@ -31,16 +31,12 @@ export class MarkPlanLinkProvider implements vscode.DocumentLinkProvider {
         destPath = path.resolve(path.dirname(document.fileName), filePath);
       }
 
-      const uri = vscode.Uri.parse(`command:_markdown.openDocumentLink?${encodeURIComponent(JSON.stringify({ path: encodeURIComponent(destPath)}))}`);
-      // not working for some reason, probably wrong argument name
-      // const uri = vscode.Uri.parse(`command:vscode.open?${encodeURIComponent(JSON.stringify({ resource: vscode.Uri.file(p)}))}`);
-
       return new vscode.DocumentLink(
         new vscode.Range(
           new vscode.Position(startPosition.line, startPosition.col),
           new vscode.Position(endPosition.line, endPosition.col),
         ),
-        uri
+        vscode.Uri.file(destPath),
       );
     });
   }
