@@ -75,8 +75,8 @@
     "ts-jest": "^24.0.2",
     "tslint": "^5.12.1",
     "typescript": "^3.3.1",
-    "vsce": "^1.62.0",
-    "vscode": "^1.1.28"
+    "vsce": "^2.7.0",
+    "vscode": "^1.1.37"
   },
   "dependencies": {
     "date-fns": "^1.30.1",

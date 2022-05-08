@@ -3,7 +3,6 @@
 ## Usage
 
 ```sh
-$ yarn vsce login # https://github.com/Microsoft/vscode-vsce/issues/328
 $ yarn vsce package
 $ code --install-extension markplan-*.vsix
 ```
